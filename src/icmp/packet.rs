@@ -3,7 +3,7 @@
 //!
 //! This module contains the functions to craft ICMP packets.
 
-use pnet::packet::icmp::{echo_request, IcmpTypes};
+use pnet::packet::icmp::{IcmpTypes};
 use pnet::packet::icmp::echo_request::MutableEchoRequestPacket;
 use pnet::packet::Packet;
 use pnet::util::checksum;

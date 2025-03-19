@@ -22,7 +22,7 @@ impl Report {
             .open(&file_name)
             .expect("Failed to create report file");
 
-        writeln!(file, "Packet Number,Timestamp,Target,Status,Error")
+        writeln!(file, "Thread ID,Packet Number,Timestamp,Target,Status,Error")
             .expect("Failed to write CSV header");
 
         println!("Report will be saved to {}", file_name);
@@ -36,6 +36,7 @@ impl Report {
     /// Writes a single row to the report.
     pub fn write_row(
         &mut self,
+        thread_id: u32,
         packet_number: u32,
         timestamp: &str,
         target: &str,
@@ -45,8 +46,8 @@ impl Report {
         if let Some(file) = self.file.as_mut() {
             writeln!(
                 file,
-                "{},{},{},{},{}",
-                packet_number, timestamp, target, status, error_message
+                "{},{},{},{},{},{}",
+                thread_id, packet_number, timestamp, target, status, error_message
             )
             .expect("Failed to write to report file");
         }

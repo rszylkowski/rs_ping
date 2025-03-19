@@ -59,6 +59,21 @@ fn main() {
                 .action(ArgAction::SetTrue),
         )
         .arg(
+            Arg::new("faf")
+                .short('f')
+                .long("faf")
+                .help("Enable multithreading")
+                .action(ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("threads")
+                .short('t')
+                .long("threads")
+                .value_name("THREADS")
+                .help("Number of threads to use (requires --faf)")
+                .default_value("1"),
+        )
+        .arg(
             Arg::new("target")
                 .help("Target IP address")
                 .required(true)
@@ -86,7 +101,9 @@ fn main() {
     let no_wait = matches.get_flag("no_wait");
     let debug = matches.get_flag("debug");
     let report = matches.get_flag("report");
+    let faf = matches.get_flag("faf");
+    let threads: u32 = matches.get_one::<String>("threads").unwrap().parse().expect("Invalid threads value");
 
     // Call the ping functionality
-    send_multiple_pings(count, interval, delay, target, no_wait, debug, report);
+    send_multiple_pings(count, interval, delay, target, no_wait, debug, report, faf, threads);
 }
