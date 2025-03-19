@@ -1,24 +1,18 @@
-// filepath: [main.rs](http://_vscodecontentref_/0)
-//! Entry point for the rs_ping application.
-
+// filepath: [main.rs](http://_vscodecontentref_/10)
 mod icmp;
 mod config;
+mod ping;
+mod report;
 
 use clap::{Arg, ArgAction, Command};
-use icmp::sender::send_ping;
-use std::env;
+use ping::send_multiple_pings;
 
-///Main function to parse argument and send a single ping.
 fn main() {
-
-    // ----------------------- arg parsing -----------------------
-    // Define the CLI using clap
+    // ----------------------- Argument Parsing -----------------------
     let matches = Command::new("rs_ping")
         .version("0.1.0")
-        .author("Your Name rszylkowski1@gmail.com")
-        .about("A Rust-based ICMP packet sender. Gives ability to use multithreading for faster packet sending.
-        
-        REQUIRES sudo/Admin rights to run.")
+        .author("Your Name <rszylkowski1@gmail.com>")
+        .about("A Rust-based ICMP packet sender. Requires sudo to run.")
         .arg(
             Arg::new("count")
                 .short('c')
@@ -26,13 +20,6 @@ fn main() {
                 .value_name("COUNT")
                 .help("Number of packets to send")
                 .default_value(config::DEFAULT_PACKET_COUNT_STR),
-        )
-        .arg(
-            Arg::new("interface")
-                .short('I')
-                .long("interface")
-                .value_name("INTERFACE")
-                .help("Interface to send packets from"),
         )
         .arg(
             Arg::new("interval")
@@ -56,21 +43,6 @@ fn main() {
                 .long("debug")
                 .help("Enable debug output")
                 .action(ArgAction::SetTrue),
-        )
-        .arg(
-            Arg::new("faf")
-                .short('f')
-                .long("faf")
-                .help("Enable multithreading (fast as f***)")
-                .action(ArgAction::SetTrue),
-        )
-        .arg(
-            Arg::new("thread")
-                .short('t')
-                .long("thread")
-                .value_name("THREAD")
-                .help("Number of threads to use (requires --faf)")
-                .default_value(config::DEFAULT_THREADS_STR),
         )
         .arg(
             Arg::new("report")
@@ -113,27 +85,8 @@ fn main() {
     let target = matches.get_one::<String>("target").unwrap();
     let no_wait = matches.get_flag("no_wait");
     let debug = matches.get_flag("debug");
+    let report = matches.get_flag("report");
 
-    // Print parsed arguments (for debugging)
-    if debug {
-        println!("Debugging enabled");
-        println!("Count: {}", count);
-        println!("Interval: {} ms", interval);
-        println!("Target: {}", target);
-        println!("No Wait: {}", no_wait);
-        println!("Delay: {} ms", delay);
-    }
-
-    // ################### arg parsing ###################
-
-    // ----------------------- Delay Before Start -----------------------
-    if delay > 0 {
-        println!("Delaying for {} ms before starting...", delay);
-        std::thread::sleep(std::time::Duration::from_millis(delay));
-    }
-    //Send a single ping
-    match send_ping(target) {
-        Ok(_) => println!("Ping set sucessfuly to {target}"),
-        Err(e) => eprintln!("Failed to send ping: {e}"),
-    }
+    // Call the ping functionality
+    send_multiple_pings(count, interval, delay, target, no_wait, debug, report);
 }
