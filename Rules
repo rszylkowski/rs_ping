@@ -1,0 +1,16 @@
+Generate Documentation and Comments:
+
+We'll use Rust's built-in documentation system ( for public items and  for module-level documentation).
+Inline comments () will be added to explain non-obvious parts of the code.
+Split the Project into Multiple Files and Directories:
+
+We'll organize the project into modules and submodules for better readability and maintainability.
+For example, packet-related logic, threading, and configuration will be separated into their own files.
+Target Unix Systems (Ubuntu) but Ensure Cross-Platform Compatibility:
+
+We'll use conditional compilation (#[cfg(target_os = "windows")] and #[cfg(target_family = "unix")]) to handle OS-specific differences.
+For example, raw socket handling may differ between Unix and Windows.
+Follow Rust Coding Standards:
+
+We'll adhere to Rust's idiomatic coding practices, such as using clippy for linting and rustfmt for formatting.
+We'll use Result and Option for error handling and avoid unwrap unless absolutely necessary.
