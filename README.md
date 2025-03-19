@@ -20,7 +20,7 @@ cargo build --release
 
 ## Usage
 ```bash
-sudo ./rs_ping <options>
+sudo ./rs_ping <options> <ip>
 ```
 
 ## Parameters
