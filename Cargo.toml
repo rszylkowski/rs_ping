@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 pnet = { version = "0.31.0", features = ["std"] }
+clap = { version = "4.1.8" }

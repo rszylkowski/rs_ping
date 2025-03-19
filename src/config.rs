@@ -3,6 +3,7 @@
 
 /// Default number of packets to send.
 pub const DEFAULT_PACKET_COUNT: u32 = 4;
+pub const DEFAULT_PACKET_COUNT_STR: &str = "4";
 
 /// Minimum allowed number of packets to send.
 pub const MIN_PACKET_COUNT: u32 = 1;
@@ -12,6 +13,7 @@ pub const MAX_PACKET_COUNT: u32 = 5000;
 
 /// Default interval between packets in milliseconds.
 pub const DEFAULT_INTERVAL_MS: u64 = 1000;
+pub const DEFAULT_INTERVAL_MS_STR: &str = "1000";
 
 /// Minimum allowed interval between packets in milliseconds.
 pub const MIN_INTERVAL_MS: u16 = 2;
@@ -21,6 +23,14 @@ pub const MAX_INTERVAL_MS: u64 = 10000;
 
 /// Default buffer size for receiving packets.
 pub const DEFAULT_BUFFER_SIZE: usize = 1024;
+
+/// Default number of threads to use.
+pub const DEFAULT_THREADS: u32 = 1;
+pub const DEFAULT_THREADS_STR: &str = "1";
+
+/// Default delay before starting to send packets in milliseconds.
+pub const DEFAULT_DELAY_MS: u64 = 0;
+pub const DEFAULT_DELAY_MS_STR: &str = "0";
 
 
 
