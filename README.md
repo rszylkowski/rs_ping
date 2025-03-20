@@ -22,6 +22,8 @@ By downloading and using this tool, you acknowledge that you have been informed 
   - **Error**: Any error encountered while sending the packet.
 - **Customizable Options**: Configure the number of packets, interval between packets, and delay before starting.
 
+This tool is currently under development. The list of features reflects the functionality available in the current release. Current version: **0.1.0**.
+
 
 ## Requirements
 - Rust (latest stable version)
@@ -80,7 +82,7 @@ The report will be saved with a timestamped filename, e.g., rs_ping_report_YYYY-
 ``` bash
 sudo ./rs_ping --count 100 --interval 500 --faf --threads 4 --report 127.0.0.1
 ```
-This command sends 100 packets to 127.0.0.1 with a 500ms interval, using 4 threads, and generates a CSV report.
+This command sends 100 packets to 127.0.0.1, a 500ms interval is not used when FaF is enabled, using 4 threads, and generates a CSV report.
 
 ## CSV Report Format
 The CSV report includes the following columns:
