@@ -1,5 +1,14 @@
 # rs_ping
 
+## Warning ⚠️
+
+This tool is intended for educational and testing purposes only. Use it responsibly and only on systems or networks you own or have explicit permission to test. Unauthorized use of this tool on external systems or networks may be considered illegal and could result in severe consequences.
+
+**You are using this tool at your own risk. The authors and contributors are not responsible for any misuse or damage caused by this tool.**
+
+By downloading and using this tool, you acknowledge that you have been informed about the potential risks and agree to use it responsibly.
+
+## Description
 `rs_ping` is a Rust-based ICMP packet sender. It allows you to send ICMP echo requests (ping) to a target IP address and supports multithreading for improved performance. The tool also generates detailed CSV reports for analysis.
 
 ## Features
@@ -12,6 +21,7 @@
   - **Status**: Whether the packet was sent successfully or failed.
   - **Error**: Any error encountered while sending the packet.
 - **Customizable Options**: Configure the number of packets, interval between packets, and delay before starting.
+
 
 ## Requirements
 - Rust (latest stable version)
