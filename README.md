@@ -28,8 +28,83 @@ This tool is currently under development. The list of features reflects the func
 ## Requirements
 - Rust (latest stable version)
 - Administrator/root privileges (required for raw socket operations)
+- config.tomp for cross-compilation is added to repository under <project>/.cargo/config.toml
+## Cross-Compiling for Windows
 
-## Compilation
+To cross-compile this project for the `x86_64-pc-windows-gnu` target, you need to install the NPcap SDK and configure your environment.
+
+### Steps to Install the NPcap SDK
+
+1. **Download the NPcap SDK**  
+   Visit the [NPcap SDK download page](https://npcap.com/#download) and download the SDK ZIP file.
+
+2. **Extract the SDK**  
+   Extract the downloaded ZIP file to a directory on your system.
+
+3. **Locate the `Packet.lib` File**  
+   Inside the extracted SDK, navigate to the `Lib\X64` directory and locate the `Packet.lib` file.
+
+4. **Copy the `Packet.lib` File**  
+   Copy the `Packet.lib` file to the appropriate directory for your cross-compilation toolchain:
+   ```bash
+   sudo cp /path/to/Packet.lib /usr/x86_64-w64-mingw32/lib/
+   ```
+5. **Update the Cargo Configuration**
+    ``` bash
+    [target.x86_64-pc-windows-gnu]
+    linker = "x86_64-w64-mingw32-gcc"
+    rustflags = [
+        "-L/usr/x86_64-w64-mingw32/lib" # Path to Packet.lib
+    ]
+    ```
+6. **Install the Rust Target**
+    ```bash
+    rustup target add x86_64-pc-windows-gnu
+    ```
+7. **Download mingw-w64**
+    ```bash
+    sudo apt install gcc-mingw-w64-x86-64
+    ```
+8. **Build the Project**
+    ```bash
+    cargo build --release --target x86_64-pc-windows-gnu
+    ```
+
+## Cross-Compiling for Raspberry Pi
+
+To compile this project for a Raspberry Pi running Ubuntu OS, you need to ensure the correct target architecture and toolchain are installed.
+
+### Steps for Cross-Compilation
+
+1. **Install the Rust Target for Raspberry Pi**  
+   Depending on your Raspberry Pi's architecture, install the appropriate Rust target:
+   ```bash
+   rustup target add armv7-unknown-linux-gnueabihf  # For ARMv7 (32-bit)
+   rustup target add aarch64-unknown-linux-gnu      # For ARMv8 (64-bit)
+   ```
+2. **Install the Cross-Compilation Toolchain**
+    ```bash
+    sudo apt install gcc-arm-linux-gnueabihf  # For ARMv7
+    sudo apt install gcc-aarch64-linux-gnu    # For ARMv8
+    ```
+3. **Update the Cargo Configuration**
+    ```bash
+    [target.armv7-unknown-linux-gnueabihf]
+    linker = "arm-linux-gnueabihf-gcc"
+
+    [target.aarch64-unknown-linux-gnu]
+    linker = "aarch64-linux-gnu-gcc"
+    ```
+4. **Build the Project for Raspberry Pi**
+    ```bash
+    cargo build --release --target armv7-unknown-linux-gnueabihf  # For ARMv7
+    cargo build --release --target aarch64-unknown-linux-gnu      # For ARMv8
+    ```
+
+
+
+
+## Compilation WSL/Linux
 To compile the project, ensure you have Rust installed. Then run:
 ```bash
 cargo build --release
@@ -90,7 +165,7 @@ The CSV report includes the following columns:
 
    Thread ID   |   Packet Number   |   Timestamp   |	Target  |   Status  |   Error   
 ----------- | ------------------ | -------------- | ---------- | ---------- | ---------
-|  1 |	1   |	2025-03-20 00:56:44.199 |	127.0.0.1   |	Success |	a |
-|  2 |	1   |	2025-03-20 00:56:44.199 |	127.0.0.1   |	Success |	a |
+|  1 |	1   |	2025-03-20 00:56:44.199 |	127.0.0.1   |	Success |	 |
+|  2 |	1   |	2025-03-20 00:56:44.199 |	127.0.0.1   |	Success |	 |
 |   ... |	... |	... |	... |	... |	... | 
 
