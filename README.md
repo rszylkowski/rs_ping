@@ -1,12 +1,17 @@
 # rs_ping
 
-`rs_ping` is a Rust-based ICMP packet sender designed for testing network configurations and firewalls. It allows for high-frequency ICMP packet sending with configurable parameters such as the number of packets, interval time, multithreading, and report generation.
+`rs_ping` is a Rust-based ICMP packet sender. It allows you to send ICMP echo requests (ping) to a target IP address and supports multithreading for improved performance. The tool also generates detailed CSV reports for analysis.
 
 ## Features
-- Send ICMP packets to a specified IP address.
-- Configurable parameters for packet count, interval, and threading.
-- Optional CSV report generation.
-- Cross-platform support (Unix and Windows).
+- **Multithreading Support**: Use the `--faf` flag to enable multithreading and specify the number of threads with `--threads`.
+- **CSV Report Generation**: Generate a detailed CSV report with the `--report` flag. The report includes:
+  - **Thread ID**: Indicates which thread handled each packet.
+  - **Packet Number**: Maintains the order of packets sent by each thread.
+  - **Timestamp**: Shows when each packet was sent.
+  - **Target**: The target IP address.
+  - **Status**: Whether the packet was sent successfully or failed.
+  - **Error**: Any error encountered while sending the packet.
+- **Customizable Options**: Configure the number of packets, interval between packets, and delay before starting.
 
 ## Requirements
 - Rust (latest stable version)
@@ -20,28 +25,62 @@ cargo build --release
 
 ## Usage
 ```bash
-sudo ./rs_ping <options> <ip>
+sudo rs_ping [OPTIONS] <target>
 ```
 
-## Parameters
+## Arguments
+  <target>  Target IP address
 
-* -c <count>: Number of packets to send (default: 4).
-* -I <interface>: Interface to send packets from (not requred -> default on linux and BSD systems rs_ping uses default routing interface.
-* -i <interval>: Interval between packets in milliseconds (default 1000ms, minimal value 2ms).
-* --faf: Enable multithreading (interval is ignored when this flag is present).
-* --thread <count>: Number of threads to use (default: 1, max: 8; used only with --faf and -c).
-* --raport: Generate a CSV report of the run.
-* -n: Do not wait for a response.
-* -h: Display help.
+## Parameters [OPTIONS]
 
-## Example
+* -c, --count <COUNT>        Number of packets to send [default: 4]
+* -i, --interval <INTERVAL>  Interval between packets in milliseconds [default: 1000]
+* -d, --delay <DELAY>        Delay before starting to send packets in milliseconds [default: 0]
+* -D, --debug                Enable debug output
+* -r, --report               Generate a CSV report
+* -n, --no-wait              Do not wait for a response
+* -f, --faf                  Enable multithreading
+* -t, --threads <THREADS>    Number of threads to use (requires --faf) [default: 1]
+* -h, --help                 Print help
+* -V, --version              Print version
 
-Send 10 packets to 192.168.1.1 with a 10ms interval:
+## Usage
+
+### Basic Usage
+
 ```bash
-sudo ./rs_ping -c 10 -t 10 192.168.1.1
+sudo ./rs_ping --count 10 --interval 1000 127.0.0.1
 ```
 
-Enable multithreading with 4 threads and generate a report:
-```bash
-sudo ./rs_ping --faf --thread 4 --raport 192.168.1.1
+### Multithreading
+
+Enable multithreading with the --faf flag and specify the number of threads with --threads.
+``` bash
+sudo ./rs_ping --count 100 --interval 500 --faf --threads 4 127.0.0.1
 ```
+
+### Generate a CSV Report
+Use the --report flag to generate a CSV report.
+``` bash
+sudo ./rs_ping --count 50 --interval 200 --report 127.0.0.1
+```
+The report will be saved with a timestamped filename, e.g., rs_ping_report_YYYY-MM-DD_HH-MM-SS.csv.
+
+### Full Example
+``` bash
+sudo ./rs_ping --count 100 --interval 500 --faf --threads 4 --report 127.0.0.1
+```
+This command sends 100 packets to 127.0.0.1 with a 500ms interval, using 4 threads, and generates a CSV report.
+
+## CSV Report Format
+The CSV report includes the following columns:
+
+
+Thread ID   |   Packet Number   |   Timestamp   |	Target  |   Status  |   Error   |
+-----------  ------------------  --------------  ----------  ----------  ----------
+1 |	1   |	2025-03-20 00:56:44.199 |	127.0.0.1   |	Success |	
+-----------  ------------------  --------------  ----------  ----------  ----------
+2 |	1   |	2025-03-20 00:56:44.199 |	127.0.0.1   |	Success |	
+-----------  ------------------  --------------  ----------  ----------  ----------
+... |	... |	... |	... |	... |	... |
+
